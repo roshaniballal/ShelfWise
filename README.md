@@ -1,6 +1,6 @@
 # ShelfWise
 
-[![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![Django](https://img.shields.io/badge/django-5.2%20%7C%206.1-0C4B33)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
