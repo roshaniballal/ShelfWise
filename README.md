@@ -1,7 +1,6 @@
 # ShelfWise
 
-[![Tests](https://github.com/roshaniballal/shelfwise/actions/workflows/tests.yml/badge.svg)](https://github.com/roshaniballal/shelfwise/actions/workflows/tests.yml)
-![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![Django](https://img.shields.io/badge/django-5.2%20%7C%206.1-0C4B33)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -11,6 +10,10 @@ Admins, editors, publishers and readers each see, and can do, different things. 
 | Catalogue | Book detail |
 |---|---|
 | ![Catalogue](docs/screenshots/catalogue.png) | ![Book detail](docs/screenshots/book-detail.png) |
+
+| Login with demo accounts | My access |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![My access](docs/screenshots/my-access.png) |
 
 ## Features
 
