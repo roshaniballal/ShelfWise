@@ -1,0 +1,12 @@
+{{ form.non_field_errors }}
+<div class="form-grid">
+  {% for field in form %}
+    {% if field.name != "publish_now" %}
+      <div class="field{% if field.name == 'description' %} field--wide{% endif %}">
+        <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %}<span class="optional">optional</span>{% endif %}</label>
+        {{ field }}
+        {{ field.errors }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

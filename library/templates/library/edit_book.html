@@ -1,0 +1,21 @@
+{% extends "library/base.html" %}
+{% block title %}Edit {{ book.title }}{% endblock %}
+
+{% block content %}
+<a class="back" href="{% url 'home' %}">Back to catalogue</a>
+<div class="page-head">
+  <div>
+    <h1>Edit book</h1>
+    <p class="muted">{{ book.title }}, added by {{ book.owner.username }}</p>
+  </div>
+</div>
+
+<form class="panel" method="post">
+  {% csrf_token %}
+  {% include "library/_form_fields.html" %}
+  <div class="form-actions">
+    <button class="btn btn--primary" type="submit">Save changes</button>
+    <a href="{% url 'home' %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

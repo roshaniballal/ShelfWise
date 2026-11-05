@@ -1,0 +1,4 @@
+# Runtime dependencies for ShelfWise.
+# Tested with Django 5.2 LTS and Django 6.1 (Django 5.2 needs Python 3.10+, Django 6.x needs Python 3.12+).
+Django>=5.2,<6.2
+python-dotenv>=1.0,<2.0

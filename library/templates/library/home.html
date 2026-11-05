@@ -1,0 +1,69 @@
+{% extends "library/base.html" %}
+{% block title %}Catalogue{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Catalogue</h1>
+    <p class="muted">{{ books|length }} book{{ books|length|pluralize }} in the library</p>
+  </div>
+  {% if perms.library.add_book %}<a class="btn btn--primary" href="{% url 'add_book' %}">Add book</a>{% endif %}
+</div>
+
+{% if user.is_authenticated %}
+  <!-- TEMPLATE PERMISSIONS: `perms` is available automatically -->
+  <div class="access" aria-label="Your access">
+    <span class="access__label">Your access</span>
+    {% if perms.library %}
+      {% if perms.library.view_book %}<span class="chip">View books</span>{% endif %}
+      {% if perms.library.add_book %}<span class="chip">Add books</span>{% endif %}
+      {% if perms.library.change_book %}<span class="chip">Edit books</span>{% endif %}
+      {% if perms.library.delete_book %}<span class="chip">Delete books</span>{% endif %}
+      {% if perms.library.publish_book %}<span class="chip">Publish books</span>{% endif %}
+      {% if perms.library.export_book %}<span class="chip">Export books</span>{% endif %}
+    {% else %}
+      <span class="muted">You have no permissions in this library yet.</span>
+    {% endif %}
+  </div>
+{% else %}
+  <p class="note">You are not logged in. <a href="{% url 'login' %}">Log in</a> to see what you are allowed to do.</p>
+{% endif %}
+
+{% if books %}
+<ul class="shelf">
+  {% for b in books %}
+  <li class="book">
+    {% if perms.library.view_book %}
+      <a class="book__link" href="{% url 'book_detail' b.pk %}" tabindex="-1">{% include "library/_cover.html" with book=b %}</a>
+    {% else %}
+      {% include "library/_cover.html" with book=b %}
+    {% endif %}
+
+    <h2 class="book__title">
+      {% if perms.library.view_book %}<a href="{% url 'book_detail' b.pk %}">{{ b.title }}</a>{% else %}{{ b.title }}{% endif %}
+    </h2>
+    <p class="book__author">{{ b.author }}</p>
+    <p class="book__status">{% include "library/_status.html" with book=b %}</p>
+    <p class="book__owner">Added by {{ b.owner.username }}</p>
+
+    {% if perms.library.change_book or b.owner == request.user or perms.library.publish_book %}
+    <div class="book__actions">
+      {% if perms.library.change_book or b.owner == request.user %}
+        <a class="btn btn--small" href="{% url 'edit_book' b.pk %}">Edit</a>
+      {% endif %}
+      {% if perms.library.publish_book %}
+        {% if b.is_published %}
+          <form class="inline-form" action="{% url 'unpublish_book' b.pk %}" method="post">{% csrf_token %}<button class="btn btn--small" type="submit">Unpublish</button></form>
+        {% else %}
+          <form class="inline-form" action="{% url 'publish_book' b.pk %}" method="post">{% csrf_token %}<button class="btn btn--small btn--primary" type="submit">Publish</button></form>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p class="note">There are no books yet.{% if perms.library.add_book %} <a href="{% url 'add_book' %}">Add the first one.</a>{% endif %}</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "library/base.html" %}
+{% block title %}Not found{% endblock %}
+
+{% block content %}
+<div class="notice">
+  <h1>This page does not exist</h1>
+  <p class="muted">The address may be mistyped, or the book may have been deleted.</p>
+  <div class="manage__row"><a class="btn btn--primary" href="{% url 'home' %}">Back to catalogue</a></div>
+</div>
+{% endblock %}

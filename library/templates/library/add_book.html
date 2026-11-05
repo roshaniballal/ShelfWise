@@ -1,0 +1,26 @@
+{% extends "library/base.html" %}
+{% block title %}Add book{% endblock %}
+
+{% block content %}
+<a class="back" href="{% url 'home' %}">Back to catalogue</a>
+<div class="page-head"><h1>Add a book</h1></div>
+
+<form class="panel" method="post">
+  {% csrf_token %}
+  {% include "library/_form_fields.html" %}
+
+  {% if can_publish %}
+    <div class="check">
+      {{ form.publish_now }}
+      <label for="{{ form.publish_now.id_for_label }}">Publish immediately</label>
+    </div>
+  {% else %}
+    <p class="note">You can add books but you cannot publish them. This book will be saved as a draft.</p>
+  {% endif %}
+
+  <div class="form-actions">
+    <button class="btn btn--primary" type="submit">Save book</button>
+    <a href="{% url 'home' %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

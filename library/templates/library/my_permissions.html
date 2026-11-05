@@ -1,0 +1,45 @@
+{% extends "library/base.html" %}
+{% block title %}My access{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>My access</h1>
+    <p class="muted">What {{ request.user.username }} is allowed to do, and where each permission comes from.</p>
+  </div>
+</div>
+
+<div class="stack">
+  <section class="section">
+    <h2>Account</h2>
+    <dl class="facts">
+      <dt>Superuser</dt><dd>{% if is_superuser %}<span class="pill pill--yes">Yes</span>{% else %}<span class="pill pill--no">No</span>{% endif %}</dd>
+      <dt>Staff (can enter /admin/)</dt><dd>{% if is_staff %}<span class="pill pill--yes">Yes</span>{% else %}<span class="pill pill--no">No</span>{% endif %}</dd>
+      <dt>Active</dt><dd>{% if is_active %}<span class="pill pill--yes">Yes</span>{% else %}<span class="pill pill--no">No</span>{% endif %}</dd>
+      <dt>Groups</dt>
+      <dd>{% if groups %}<ul class="chips">{% for g in groups %}<li class="chip">{{ g }}</li>{% endfor %}</ul>{% else %}<span class="muted">None</span>{% endif %}</dd>
+    </dl>
+    {% if is_superuser %}
+      <p class="note" style="margin-top:16px">Superusers pass every permission check, so the lists below can be empty even though you can do everything.</p>
+    {% endif %}
+  </section>
+
+  <section class="section">
+    <h2>Assigned directly to you</h2>
+    <p>From <code>get_user_permissions()</code>.</p>
+    {% if user_perms %}<ul class="chips">{% for p in user_perms %}<li class="chip">{{ p }}</li>{% endfor %}</ul>{% else %}<span class="muted">None</span>{% endif %}
+  </section>
+
+  <section class="section">
+    <h2>Inherited from your groups</h2>
+    <p>From <code>get_group_permissions()</code>.</p>
+    {% if group_perms %}<ul class="chips">{% for p in group_perms %}<li class="chip">{{ p }}</li>{% endfor %}</ul>{% else %}<span class="muted">None</span>{% endif %}
+  </section>
+
+  <section class="section">
+    <h2>Everything combined</h2>
+    <p>From <code>get_all_permissions()</code>.</p>
+    {% if all_perms %}<ul class="chips">{% for p in all_perms %}<li class="chip">{{ p }}</li>{% endfor %}</ul>{% else %}<span class="muted">None</span>{% endif %}
+  </section>
+</div>
+{% endblock %}

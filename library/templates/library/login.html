@@ -1,0 +1,53 @@
+{% extends "library/base.html" %}
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div class="auth">
+  <div>
+    <div class="page-head"><h1>Log in</h1></div>
+    <form class="panel" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {% if form.errors %}
+        <p class="message message--error">The username or password is wrong, or the account is inactive.</p>
+      {% endif %}
+      <div class="field">
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" autocomplete="username" autofocus required>
+      </div>
+      <div class="field" style="margin-top:18px">
+        <label for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" autocomplete="current-password" required>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit">Log in</button>
+        <a href="{% url 'home' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="section">
+    <h2>Demo accounts</h2>
+    <p>Select one to fill in the username. Every demo account uses the password <b>test1234</b>.</p>
+    <ul class="demo-list">
+      <li><button class="demo" type="button" data-user="admin"><strong>admin</strong><span>Superuser, can do everything</span></button></li>
+      <li><button class="demo" type="button" data-user="editor"><strong>editor</strong><span>Can view, add and edit books</span></button></li>
+      <li><button class="demo" type="button" data-user="publisher"><strong>publisher</strong><span>Can view, add, publish and export</span></button></li>
+      <li><button class="demo" type="button" data-user="viewer"><strong>viewer</strong><span>Can only view published books</span></button></li>
+      <li><button class="demo" type="button" data-user="direct_perm"><strong>direct_perm</strong><span>View and delete, assigned directly</span></button></li>
+      <li><button class="demo" type="button" data-user="anon_like"><strong>anon_like</strong><span>Logged in, no permissions</span></button></li>
+      <li><button class="demo" type="button" data-user="inactive"><strong>inactive</strong><span>Disabled, cannot log in</span></button></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Demo convenience only: fills the username box. Remove for a real project.
+  document.querySelectorAll(".demo").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.getElementById("id_username").value = btn.dataset.user;
+      document.getElementById("id_password").focus();
+    });
+  });
+</script>
+{% endblock %}

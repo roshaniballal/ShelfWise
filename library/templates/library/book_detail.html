@@ -1,0 +1,59 @@
+{% extends "library/base.html" %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<a class="back" href="{% url 'home' %}">Back to catalogue</a>
+
+<div class="detail">
+  <div>{% include "library/_cover.html" with book=book large=True %}</div>
+
+  <div>
+    <h1 class="detail__title">{{ book.title }}</h1>
+    <p class="detail__author">by {{ book.author }}</p>
+    <p class="detail__status">{% include "library/_status.html" with book=book %}</p>
+
+    {% if not book.is_published %}
+      <p class="note">This book is a draft. Only its owner, editors and publishers can see it.</p>
+    {% endif %}
+
+    <div class="prose">
+      {% if book.description %}{{ book.description|linebreaks }}{% else %}<p class="muted">No description yet.</p>{% endif %}
+    </div>
+
+    <dl class="facts">
+      <dt>Genre</dt><dd>{{ book.get_genre_display }}</dd>
+      <dt>ISBN</dt><dd>{{ book.isbn|default:"Not set" }}</dd>
+      <dt>Pages</dt><dd>{{ book.page_count|default:"Not set" }}</dd>
+      <dt>Publication year</dt><dd>{{ book.publication_year|default:"Not set" }}</dd>
+      <dt>Added by</dt><dd>{{ book.owner.username }}</dd>
+      <dt>Added on</dt><dd>{{ book.created_at|date:"j M Y, H:i" }}</dd>
+      <dt>Last updated</dt><dd>{{ book.updated_at|date:"j M Y, H:i" }}</dd>
+    </dl>
+
+    <section class="manage">
+      <h2>What you can do with this book</h2>
+      <div class="manage__row">
+        {% if perms.library.change_book or book.owner == request.user %}
+          <a class="btn" href="{% url 'edit_book' book.pk %}">Edit book</a>
+        {% endif %}
+
+        {% if perms.library.publish_book %}
+          {% if book.is_published %}
+            <form class="inline-form" action="{% url 'unpublish_book' book.pk %}" method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}"><button class="btn" type="submit">Unpublish</button></form>
+          {% else %}
+            <form class="inline-form" action="{% url 'publish_book' book.pk %}" method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}"><button class="btn btn--primary" type="submit">Publish</button></form>
+          {% endif %}
+        {% endif %}
+
+        {% if perms.library.delete_book %}
+          <form class="inline-form" action="/books/{{ book.pk }}/delete/" method="post" onsubmit="return confirm('Delete this book permanently?');">{% csrf_token %}<button class="btn btn--danger" type="submit">Delete book</button></form>
+        {% endif %}
+
+        {% if not perms.library.change_book and not perms.library.publish_book and not perms.library.delete_book and book.owner != request.user %}
+          <span class="muted">You have read-only access to this book.</span>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
